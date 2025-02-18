@@ -5,6 +5,8 @@ import { LoginPage } from './pages/LoginPage';
 import { DashboardLayout } from './components/DashboardLayout';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { ThemeProvider, createTheme } from '@mui/material';
+import { UsersPage } from './pages/UsersPage';
+import { CategoriesPage } from './pages/CategoriesPage';
 
 const theme = createTheme({
     // You can customize the theme here
@@ -23,8 +25,8 @@ function App() {
                                 <ProtectedRoute requireAdmin>
                                     <DashboardLayout>
                                         <Routes>
-                                            <Route path="/users" element={<div>Users Page</div>} />
-                                            <Route path="/categories" element={<div>Categories Page</div>} />
+                                            <Route path="/users" element={<UsersPage />} />
+                                            <Route path="/categories" element={<CategoriesPage />} />
                                             <Route path="/tags" element={<div>Tags Page</div>} />
                                         </Routes>
                                     </DashboardLayout>
