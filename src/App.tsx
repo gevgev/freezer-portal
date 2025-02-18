@@ -1,26 +1,42 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './contexts/AuthContext';
+import { LoginPage } from './pages/LoginPage';
+import { DashboardLayout } from './components/DashboardLayout';
+import { ProtectedRoute } from './components/ProtectedRoute';
+import { ThemeProvider, createTheme } from '@mui/material';
+
+const theme = createTheme({
+    // You can customize the theme here
+});
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <ThemeProvider theme={theme}>
+            <AuthProvider>
+                <BrowserRouter>
+                    <Routes>
+                        <Route path="/login" element={<LoginPage />} />
+                        <Route
+                            path="/dashboard/*"
+                            element={
+                                <ProtectedRoute requireAdmin>
+                                    <DashboardLayout>
+                                        <Routes>
+                                            <Route path="/users" element={<div>Users Page</div>} />
+                                            <Route path="/categories" element={<div>Categories Page</div>} />
+                                            <Route path="/tags" element={<div>Tags Page</div>} />
+                                        </Routes>
+                                    </DashboardLayout>
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route path="/" element={<Navigate to="/dashboard/users" replace />} />
+                    </Routes>
+                </BrowserRouter>
+            </AuthProvider>
+        </ThemeProvider>
+    );
 }
 
 export default App;
