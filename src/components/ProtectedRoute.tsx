@@ -1,23 +1,30 @@
-import React from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
 interface ProtectedRouteProps {
-    children: React.ReactElement;
+    children: React.ReactNode;
     requireAdmin?: boolean;
 }
 
-export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requireAdmin = true }) => {
-    const { user, token } = useAuth();
-    const location = useLocation();
+export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requireAdmin }) => {
+    const { token, user } = useAuth();
+    const navigate = useNavigate();
 
-    if (!token || !user) {
-        return <Navigate to="/login" state={{ from: location }} replace />;
+    useEffect(() => {
+        if (!token) {
+            navigate('/login');
+            return;
+        }
+
+        if (requireAdmin && user?.role !== 'admin') {
+            navigate('/login');
+        }
+    }, [token, user, requireAdmin, navigate]);
+
+    if (!token || (requireAdmin && user?.role !== 'admin')) {
+        return null;
     }
 
-    if (requireAdmin && user.role !== 'admin') {
-        return <Navigate to="/unauthorized" replace />;
-    }
-
-    return children;
+    return <>{children}</>;
 }; 

@@ -7,6 +7,7 @@ import { ProtectedRoute } from './components/ProtectedRoute';
 import { ThemeProvider, createTheme } from '@mui/material';
 import { UsersPage } from './pages/UsersPage';
 import { CategoriesPage } from './pages/CategoriesPage';
+import { TagsPage } from './pages/TagsPage';
 
 const theme = createTheme({
     // You can customize the theme here
@@ -27,7 +28,7 @@ function App() {
                                         <Routes>
                                             <Route path="/users" element={<UsersPage />} />
                                             <Route path="/categories" element={<CategoriesPage />} />
-                                            <Route path="/tags" element={<div>Tags Page</div>} />
+                                            <Route path="/tags" element={<TagsPage />} />
                                         </Routes>
                                     </DashboardLayout>
                                 </ProtectedRoute>
